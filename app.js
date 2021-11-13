@@ -4,7 +4,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const compression = require('compression');
 const helmet = require('helmet');
-const adminRouter = require('./routes/adminRoutes.js');
+const userRouter = require('./routes/userRoutes.js');
 const database = require('./config/database');
 
 //Setup DB Connection
@@ -22,13 +22,13 @@ app.use(express.json());
 app.use(compression());
 
 const corsOptions = {
-  origin: process.env.CLIENT_ORIGIN || 'http://localhost:6868',
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
 };
 //Allow CORS
 app.use(cors(corsOptions));
 app.use(helmet());
 
-app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/user', userRouter);
 
 app.use('/api/v1', (req, res) => {
   res.json({
