@@ -1,12 +1,12 @@
 const { DataTypes } = require('sequelize');
 const database = require('../config/database');
-const TourmeUser = require('./TourmeUser');
 
 const TourmeProject = database.define('TourmeProject', {
   projectId: {
     type: DataTypes.BIGINT,
     allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   },
   projectName: {
     type: DataTypes.STRING,
@@ -30,4 +30,5 @@ const TourmeProject = database.define('TourmeProject', {
     allowNull: false,
   },
 });
+
 module.exports = TourmeProject;

@@ -19,7 +19,6 @@ exports.getAllUserDetails = async (req, res) => {
     console.log(error);
     res.status(500).json({
       status: 'error',
-      error,
     });
   }
 };
@@ -44,7 +43,6 @@ exports.getUserDetails = async (req, res) => {
     console.log(error);
     res.status(500).json({
       status: 'error',
-      error,
     });
   }
 };
@@ -52,19 +50,18 @@ exports.getUserDetails = async (req, res) => {
 //Add a Admin User to Tourme
 exports.addNewUserDetails = async (req, res) => {
   const { userId, fullName, emailId } = req.body;
-  console.log({ userId, fullName, emailId });
 
   try {
-    const tourmeUser = await TourmeUser.create({
+    const user = await TourmeUser.create({
       userId,
       fullName,
       emailId,
     });
 
-    if (tourmeUser) {
+    if (user) {
       res.status(201).json({
         status: 'success',
-        tourmeUser,
+        user,
       });
     } else {
       res.status(201).json({
@@ -75,7 +72,6 @@ exports.addNewUserDetails = async (req, res) => {
     console.log(error);
     res.status(500).json({
       status: 'error',
-      error,
     });
   }
 };
