@@ -4,7 +4,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const compression = require('compression');
 const helmet = require('helmet');
-const tourRouter = require('./routes/tourRoutes.js');
+const adminRouter = require('./routes/adminRoutes.js');
 
 const app = express();
 app.enable('trust proxy');
@@ -20,14 +20,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(helmet());
 
+app.use('/api/v1/admin', adminRouter);
+
 app.use('/api/v1', (req, res) => {
   res.json({
     status: 'success',
     message: 'Welcome to Tourme API',
   });
 });
-
-app.use('/api/v1/tours', tourRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
