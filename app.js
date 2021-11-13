@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const compression = require('compression');
 const helmet = require('helmet');
 const userRouter = require('./routes/userRoutes.js');
+const projectRouter = require('./routes/projectRoutes.js');
 const database = require('./config/database');
 
 //Setup DB Connection
@@ -29,6 +30,7 @@ app.use(cors(corsOptions));
 app.use(helmet());
 
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/project', projectRouter);
 
 app.use('/api/v1', (req, res) => {
   res.json({

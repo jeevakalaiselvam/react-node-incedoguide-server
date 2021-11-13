@@ -41,6 +41,7 @@ exports.getUserDetails = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: 'error',
       error,
@@ -71,6 +72,7 @@ exports.addNewUserDetails = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: 'error',
       error,

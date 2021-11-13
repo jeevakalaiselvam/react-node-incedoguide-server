@@ -1,16 +1,23 @@
 const { DataTypes } = require('sequelize');
 const database = require('../config/database');
-const TourmeUser = database.define('TourmeUser', {
+const TourmeUser = require('./TourmeUser');
+
+const TourmeProject = database.define('TourmeProject', {
+  projectId: {
+    type: DataTypes.BIGINT,
+    allowNull: false,
+    primaryKey: true,
+  },
+  projectName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   userId: {
     type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false,
+    references: 'TourmeUser',
+    referencesKey: 'userId',
   },
-  emailId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  fullName: {
+  roleType: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -23,5 +30,4 @@ const TourmeUser = database.define('TourmeUser', {
     allowNull: false,
   },
 });
-
-module.exports = TourmeUser;
+module.exports = TourmeProject;
