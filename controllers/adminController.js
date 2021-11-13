@@ -1,21 +1,46 @@
-const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize(
-  `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:5432/${process.env.DB_NAME}`
-);
+const db = require('../config/database');
+const TourmeAdminUser = require('../models/TourmeAdminUser');
 
-exports.getAdminUserDetails = async (req, res) => {
-  const { userid } = req.query;
-  console.log(userid);
+//Get all Admin Users for Tourme
+exports.getAdminDetails = async (req, res) => {
+  await TourmeAdminUser.findAll()
+    .then((tourmeAdminUsers) => {
+      console.log(tourmeAdminUsers);
+      res.status(200).json({
+        status: 'success',
+        tourmeAdminUsers,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        status: 'fail',
+        error,
+      });
+    });
+};
 
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+//Add a Admin User to Tourme
+exports.addNewAdminDetails = async (req, res) => {
+  const { userId, fullName, emailId } = req.body;
+  console.log({ userId, fullName, emailId });
 
-  res.status(200).json({
-    status: 'success',
-    message: 'Admin User Route reached',
-  });
+  //Insert Admin user in Table
+  TourmeAdminUser.create({
+    userId,
+    fullName,
+    emailId,
+  })
+    .then((tourmeAdminUser) => {
+      res.status(201).json({
+        status: 'success',
+        tourmeAdminUser,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        status: 'fail',
+        error,
+      });
+    });
 };

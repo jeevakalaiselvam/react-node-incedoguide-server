@@ -3,6 +3,7 @@ const adminController = require('../controllers/adminController');
 
 const router = express.Router();
 
-router.get('/', adminController.getAdminUserDetails);
+router.get('/', adminController.getAdminDetails);
+router.post('/', adminController.addNewAdminDetails);
 
 module.exports = router;

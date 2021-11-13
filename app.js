@@ -5,7 +5,15 @@ const dotenv = require('dotenv');
 const compression = require('compression');
 const helmet = require('helmet');
 const adminRouter = require('./routes/adminRoutes.js');
+const database = require('./config/database');
 
+//Setup DB Connection
+database
+  .authenticate()
+  .then(() => console.log('Database connected!'))
+  .catch((error) => console.log('Database connection failure!', error));
+
+//Create Express Apps
 const app = express();
 app.enable('trust proxy');
 

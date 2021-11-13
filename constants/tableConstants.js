@@ -1,0 +1,1 @@
+exports.TOURME_ADMIN_USERS = `${process.env.DB_NAME}.TOURME_ADMIN_USERS`;
