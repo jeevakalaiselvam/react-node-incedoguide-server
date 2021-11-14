@@ -3,8 +3,9 @@ const userController = require('../controllers/userController');
 
 const router = express.Router();
 
-router.get('/', userController.getAllUserDetails);
-router.get('/:userId', userController.getUserDetails);
-router.post('/', userController.addNewUserDetails);
+router.post('/all', userController.getAllUserDetails);
+router.post('/info', userController.getUserDetails);
+router.post('/new', userController.addNewUserDetails);
+router.post('/onboard', userController.onboardProject);
 
 module.exports = router;

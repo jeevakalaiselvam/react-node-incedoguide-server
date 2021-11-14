@@ -3,6 +3,6 @@ const projectController = require('../controllers/projectController');
 
 const router = express.Router();
 
-router.post('/onboard', projectController.onboardProject);
+router.post('/info', projectController.getProjectInfo);
 
 module.exports = router;
