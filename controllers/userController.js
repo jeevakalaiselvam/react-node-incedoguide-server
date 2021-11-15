@@ -1,69 +1,50 @@
 const db = require('../config/database');
-const { TOURME_ROLES } = require('../constants/tourmeConstants');
-const TourmeProject = require('../models/TourmeProject');
-const TourmeUser = require('../models/TourmeUser');
-
-//Get all Admin Users for Tourme
-exports.getAllUserDetails = async (req, res) => {
-  try {
-    const tourmeUsers = await TourmeUser.findAll();
-    if (tourmeUsers) {
-      res.status(200).json({
-        status: 'success',
-        tourmeUsers,
-      });
-    } else {
-      res.status(200).json({
-        status: 'fail',
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      status: 'error',
-    });
-  }
-};
+const User = require('../models/User');
+const Project = require('../models/Project');
 
 //Get all User Details, If not present, Onboard User and Project
 exports.getUserDetails = async (req, res) => {
   try {
     const { userId, emailId, fullName, projectName } = req.body;
-    const tourmeUser = await TourmeUser.findOne({ where: { userId: userId } });
+    //Find if user is present already
+    const userFound = await User.findOne({ where: { userId: userId } });
 
-    if (tourmeUser !== null) {
-      const projectsForUser = await TourmeProject.findAll({
-        where: { userId: userId },
+    //If user is not present, Create the user and send response
+    if (userFound === null) {
+      const userCreated = await User.create({
+        userId,
+        emailId,
+        fullName,
+        projectName,
       });
-
-      if (projectsForUser !== null) {
-        res.status(200).json({
-          status: 'success',
-          tourmeUser,
-          projectsForUser,
-        });
-      }
-    } else {
-      const newUser = TourmeUser.create({ userId, emailId, fullName });
-      if (newUser !== null) {
-        const newProject = TourmeProject.create({
+      if (userCreated !== null) {
+        //If creating user is success, Onboard the project for the user
+        const projectCreated = Project.create({
           userId,
           projectName,
-          roleType: TOURME_ROLES.TOURME_ADMIN,
+          userRole: 'TOURME_ADMIN',
         });
-
-        if (newProject !== null) {
-          const projectsForUser = await TourmeProject.findAll({
-            where: { userId: userId },
-          });
-          if (projectsForUser) {
-            res.status(200).json({
-              status: 'success',
-              newUser,
-              projectsForUser,
-            });
-          }
+        if (projectCreated !== null) {
+          res.status(201).json({ user: userCreated, project: projectCreated });
         }
+      } else {
+        //If creating user failed, Send status 500
+        res.status(500).json({ status: 'fail' });
+      }
+    } else {
+      //If user is already present, Get the project for userId and projectName
+      const projectFound = Project.findOne({
+        where: { userId: userId, projectName: projectName },
+      });
+      if (projectFound !== null) {
+        //After grabbing project for user, Send them as response
+        res.status(200).json({
+          user: userFound,
+          project: projectFound,
+        });
+      } else {
+        //If project is not present for user, Send failure as response
+        res.status(500).json({ status: 'fail' });
       }
     }
   } catch (error) {
