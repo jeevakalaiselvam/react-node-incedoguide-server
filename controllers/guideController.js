@@ -35,12 +35,15 @@ exports.getAllGuides = async (req, res) => {
 
 exports.addNewGuide = async (req, res) => {
   try {
-    const { projectId, identifier, steps, title } = req.body;
+    const { projectId, identifier, steps, title, roleVisibilityList } =
+      req.body;
+    const rolesForGuide = Object.keys(roleVisibilityList);
     const createdGuide = await Guide.create({
       projectId,
       identifier,
       steps,
       title,
+      roleVisibility: rolesForGuide,
     });
     if (createdGuide !== null) {
       const allGuidesForProjectAndIdentifier = await Guide.findAll({
@@ -65,6 +68,7 @@ exports.addNewGuide = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: 'fail',
       error,
