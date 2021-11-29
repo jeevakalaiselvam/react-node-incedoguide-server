@@ -27,3 +27,33 @@ exports.getProjectInfo = async (req, res) => {
     });
   }
 };
+
+//Update Project
+exports.updateProjectRoles = async (req, res) => {
+  console.log('UPDATING PROJECT ROLES');
+  try {
+    const { userId, projectId, projectRoles } = req.body;
+    const updatedProject = await Project.update(
+      { projectRoles },
+      { where: { projectId, userId } }
+    );
+    if (updatedProject !== null) {
+      const rolesUpdatedProject = await Project.findOne({
+        where: { projectId, userId },
+      });
+      res.status(200).json({
+        rolesUpdatedProject,
+      });
+    } else {
+      console.log(error);
+      res.status(500).json({
+        status: 'error',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+    });
+  }
+};
