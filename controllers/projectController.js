@@ -42,7 +42,7 @@ exports.updateProjectRoles = async (req, res) => {
         where: { projectId, userId },
       });
       res.status(200).json({
-        rolesUpdatedProject,
+        project: rolesUpdatedProject,
       });
     } else {
       console.log(error);
