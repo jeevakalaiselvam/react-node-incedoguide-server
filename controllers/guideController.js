@@ -168,3 +168,41 @@ exports.deleteGuides = async (req, res) => {
     });
   }
 };
+
+//Update Guide Roles
+exports.updateGuideRoles = async (req, res) => {
+  console.log('UPDATING GUIDE ROLES');
+  try {
+    const { projectId, rolesInGuides, identifier } = req.body;
+    const updatePromises = Object.keys(rolesInGuides).map((guideId) => {
+      return new Promise(async (resolve, reject) => {
+        const updatedProject = await Guide.update(
+          { roleVisibility: rolesInGuides[guideId] },
+          { where: { guideId, projectId } }
+        );
+        if (updatedProject !== null) {
+          resolve(updatedProject);
+        } else {
+          reject(new Error('Error updating Guide'));
+        }
+      });
+    });
+    Promise.all(updatePromises)
+      .then((data) => {
+        res.status(200).json({
+          rolesInGuides,
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          status: 'fail',
+          error,
+        });
+      });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      error,
+    });
+  }
+};
