@@ -27,6 +27,11 @@ const Guide = database.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    roleVisibility: {
+      type: DataTypes.JSON,
+      allowNull: false,
+      defaultValue: [],
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

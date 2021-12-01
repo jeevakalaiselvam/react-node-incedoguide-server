@@ -35,12 +35,15 @@ exports.getAllGuides = async (req, res) => {
 
 exports.addNewGuide = async (req, res) => {
   try {
-    const { projectId, identifier, steps, title } = req.body;
+    const { projectId, identifier, steps, title, roleVisibilityList } =
+      req.body;
+    const rolesForGuide = Object.keys(roleVisibilityList);
     const createdGuide = await Guide.create({
       projectId,
       identifier,
       steps,
       title,
+      roleVisibility: rolesForGuide,
     });
     if (createdGuide !== null) {
       const allGuidesForProjectAndIdentifier = await Guide.findAll({
@@ -65,6 +68,7 @@ exports.addNewGuide = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: 'fail',
       error,
@@ -152,6 +156,44 @@ exports.deleteGuides = async (req, res) => {
       })
       .catch((error) => {
         console.log(error);
+        res.status(500).json({
+          status: 'fail',
+          error,
+        });
+      });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      error,
+    });
+  }
+};
+
+//Update Guide Roles
+exports.updateGuideRoles = async (req, res) => {
+  console.log('UPDATING GUIDE ROLES');
+  try {
+    const { projectId, rolesInGuides, identifier } = req.body;
+    const updatePromises = Object.keys(rolesInGuides).map((guideId) => {
+      return new Promise(async (resolve, reject) => {
+        const updatedProject = await Guide.update(
+          { roleVisibility: rolesInGuides[guideId] },
+          { where: { guideId, projectId } }
+        );
+        if (updatedProject !== null) {
+          resolve(updatedProject);
+        } else {
+          reject(new Error('Error updating Guide'));
+        }
+      });
+    });
+    Promise.all(updatePromises)
+      .then((data) => {
+        res.status(200).json({
+          rolesInGuides,
+        });
+      })
+      .catch((error) => {
         res.status(500).json({
           status: 'fail',
           error,

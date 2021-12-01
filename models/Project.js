@@ -23,6 +23,10 @@ const Project = database.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    projectRoles: {
+      type: DataTypes.JSON,
+      allowNull: false,
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
