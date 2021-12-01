@@ -28,8 +28,13 @@ const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
 };
 //Allow CORS
-app.use(cors(corsOptions));
-//app.use(cors());
+// app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: '*',
+  })
+);
+
 app.use(helmet());
 
 //Handle all API Routes
