@@ -29,6 +29,8 @@ const corsOptions = {
 };
 //Allow CORS
 // app.use(cors(corsOptions));
+
+//Allow all origin
 app.use(
   cors({
     origin: '*',
