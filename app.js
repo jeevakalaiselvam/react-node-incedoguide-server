@@ -24,12 +24,12 @@ app.enable('trust proxy');
 app.use(express.json());
 app.use(compression());
 
-// const corsOptions = {
-//   origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000' || ,
-// };
-// //Allow CORS
-// app.use(cors(corsOptions));
-app.use(cors());
+const corsOptions = {
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000' || 
+};
+//Allow CORS
+app.use(cors(corsOptions));
+//app.use(cors());
 app.use(helmet());
 
 //Handle all API Routes
