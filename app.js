@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(compression());
 
 const corsOptions = {
-  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000' || 
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
 };
 //Allow CORS
 app.use(cors(corsOptions));
@@ -46,7 +46,7 @@ app.use('/api/v1', (req, res) => {
 });
 
 app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  next(new Error(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 module.exports = app;
