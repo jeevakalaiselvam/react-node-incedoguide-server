@@ -48,7 +48,7 @@ app.use('/api/v1/audit', auditRouter);
 app.use('/api/v1', (req, res) => {
   res.json({
     status: 'success',
-    message: 'Welcome to Incedo Guide API',
+    message: 'Welcome to Guide API',
   });
 });
 
